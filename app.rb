@@ -23,13 +23,14 @@ class App
   end
 
   def handle_params
-    if time_path? && params.empty?
-      response(200, '1970-01-01')
-    elsif params['format'] && params['format'] != ''
-      formatter = TimeFormatter.new(params['format'])
-      formatter.valid? ? response(200, formatter.time) : response(200, 'Unknown format!')
+    if params['format'] && params['format'] != ''
+      formatter = TimeFormatter.new(params['format']).call
+      unknown_formats = "Unknown format [#{formatter.unknown_formats.join(', ')}]"
+
+      message = formatter.valid? ? formatter.time : unknown_formats
+      response(200, message)
     else
-      response(400, 'Specify format!')
+      params.empty? ? response(200, '') : response(400, 'Specify format!')
     end
   end
 

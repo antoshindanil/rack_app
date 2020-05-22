@@ -19,8 +19,12 @@ class TimeFormatter
     @time = time
   end
 
-  def valid?
+  def call
     @unknown_formats = @received_formats - AVAILABLE_FORMAT
+    self
+  end
+
+  def valid?
     @unknown_formats.empty?
   end
 
