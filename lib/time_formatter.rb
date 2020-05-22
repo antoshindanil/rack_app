@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class TimeFormatter
-  attr_reader :received_formats, :unknown_formats
+  attr_reader :received_formats
 
   FORMAT_TO_STRFTIME = {
     'year' => '%Y',
@@ -21,11 +21,14 @@ class TimeFormatter
 
   def call
     @unknown_formats = @received_formats - AVAILABLE_FORMAT
-    self
   end
 
   def valid?
     @unknown_formats.empty?
+  end
+
+  def unknown_formats
+    "Unknown format [#{@unknown_formats.join(', ')}]"
   end
 
   def time

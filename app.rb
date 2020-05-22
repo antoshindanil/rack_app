@@ -24,13 +24,11 @@ class App
 
   def handle_params
     if params['format'] && params['format'] != ''
-      formatter = TimeFormatter.new(params['format']).call
-      unknown_formats = "Unknown format [#{formatter.unknown_formats.join(', ')}]"
-
-      message = formatter.valid? ? formatter.time : unknown_formats
-      response(200, message)
+      formatter = TimeFormatter.new(params['format'])
+      formatter.call
+      formatter.valid? ? response(200, formatter.time) : response(400, formatter.unknown_formats)
     else
-      params.empty? ? response(200, '') : response(400, 'Specify format!')
+      response(200, '')
     end
   end
 
